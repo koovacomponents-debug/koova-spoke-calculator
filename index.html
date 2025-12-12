@@ -18,24 +18,26 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            padding: 30px 20px;
+            padding: 0;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
         }
         
         /* Calculator Grid */
         .calc-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 30px;
+            padding: 0;
         }
         
         .calc-side {
             background: #fafafa;
-            padding: 30px;
+            padding: 25px;
             border-radius: 2px;
             border: 1px solid #e8e8e8;
             transition: box-shadow 0.3s ease;
@@ -48,21 +50,21 @@
         .calc-side h2 {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             color: #000000;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #ec7120;
             letter-spacing: 0.3px;
         }
         
         /* Form Elements */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 500;
             color: #1a1a1a;
             font-size: 12px;
@@ -104,13 +106,13 @@
         
         /* Radio Group */
         .radio-group {
-            margin-bottom: 20px;
-            padding: 12px;
+            margin-bottom: 16px;
+            padding: 10px;
             background: #ffffff;
             border-radius: 2px;
             border: 1px solid #e0e0e0;
             display: flex;
-            gap: 25px;
+            gap: 20px;
         }
         
         .radio-group label {
@@ -140,15 +142,15 @@
         .result-box {
             background: linear-gradient(135deg, #ec7120 0%, #d66318 100%);
             color: #ffffff;
-            padding: 20px;
+            padding: 18px;
             border-radius: 2px;
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
             box-shadow: 0 6px 16px rgba(236, 113, 32, 0.2);
         }
         
         .result-box h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-size: 11px;
             font-weight: 600;
             opacity: 0.9;
@@ -172,18 +174,14 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .calc-container {
-                gap: 30px;
+                gap: 25px;
             }
         }
         
         @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-            }
-            
             .calc-container {
                 grid-template-columns: 1fr;
-                gap: 25px;
+                gap: 20px;
             }
             
             .calc-side {
@@ -204,9 +202,9 @@
 <body>
     <div class="container">
         <div class="calc-container">
-            <!--  Non-Drive Side -->
+            <!-- Drive Side -->
             <div class="calc-side">
-                <h2>Non-Drive Side</h2>
+                <h2>Drive Side</h2>
                 
                 <div class="radio-group">
                     <label>
@@ -275,9 +273,9 @@
                 </div>
             </div>
 
-            <!--Drive Side -->
+            <!-- Non-Drive Side -->
             <div class="calc-side">
-                <h2>Drive Side</h2>
+                <h2>Non-Drive Side</h2>
                 
                 <div class="radio-group">
                     <label>
