@@ -3,340 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koova Spoke Length Calculator | Professional Wheel Building Tool</title>
+    <title>Koova Spoke Calculator – S10/S60/S10B/S60B Hubs</title>
+    <meta name="description" content="Free Koova spoke length calculator for S10, S10B, S60 & S60B hubs. Accurate J-bend and straight-pull spoke calculations in seconds.">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            background:#fff;color:#1a1a1a;line-height:1.6
         }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
-            background: #ffffff;
-            color: #1a1a1a;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        .container{max-width:1400px;margin:0 auto;padding:40px 20px}
+        .calc-container{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:50px;
+            margin-top:20px
         }
+        @media(max-width:992px){.calc-container{grid-template-columns:1fr;gap:40px}}
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 60px 30px;
+        .calc-side{
+            background:#fafafa;
+            padding:40px;
+            border-radius:4px;
+            border:1px solid #e8e8e8
         }
-        
-        /* Header Section */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
+        .calc-side h2{
+            font-size:24px;
+            font-weight:600;
+            text-align:center;
+            margin-bottom:20px;
+            padding-bottom:12px;
+            border-bottom:3px solid #ec7120
         }
-        
-        .header h1 {
-            font-size: 42px;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+        .form-group{margin-bottom:22px}
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:500;
+            font-size:13px;
+            text-transform:uppercase;
+            letter-spacing:0.5px;
+            color:#333
         }
-        
-        .header .subtitle {
-            font-size: 18px;
-            color: #666666;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-        }
-        
-        .header .divider {
-            width: 60px;
-            height: 3px;
-            background: #ec7120;
-            margin: 25px auto 0;
-        }
-        
-        /* Calculator Grid */
-        .calc-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            margin-bottom: 50px;
-        }
-        
-        .calc-side {
-            background: #fafafa;
-            padding: 40px;
-            border-radius: 2px;
-            border: 1px solid #e8e8e8;
-            transition: box-shadow 0.3s ease;
-        }
-        
-        .calc-side:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-        
-        .calc-side h2 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #000000;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ec7120;
-            letter-spacing: 0.3px;
-        }
-        
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #1a1a1a;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
         .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d4d4d4;
-            border-radius: 2px;
-            font-size: 15px;
-            transition: all 0.2s ease;
-            background: #ffffff;
-            color: #1a1a1a;
-            font-family: inherit;
+        .form-group select{
+            width:100%;
+            padding:12px 14px;
+            border:1px solid #d4d4d4;
+            border-radius:4px;
+            font-size:15px;
+            background:#fff
         }
-        
-        .form-group input:hover,
-        .form-group select:hover {
-            border-color: #b8b8b8;
-        }
-        
         .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #ec7120;
-            box-shadow: 0 0 0 3px rgba(236, 113, 32, 0.1);
+        .form-group select:focus{
+            outline:none;
+            border-color:#ec7120;
+            box-shadow:0 0 0 3px rgba(236,113,32,0.1)
         }
-        
-        .form-group input:disabled {
-            background: #f5f5f5;
-            color: #999999;
-            cursor: not-allowed;
-            border-color: #e8e8e8;
+        .radio-group{
+            display:flex;
+            justify-content:center;
+            gap:30px;
+            padding:16px;
+            background:#fff;
+            border:1px solid #e0e0e0;
+            border-radius:4px;
+            margin-bottom:22px
         }
+        @media(max-width:480px){.radio-group{flex-direction:column;gap:12px}}
         
-        /* Radio Group */
-        .radio-group {
-            margin-bottom: 24px;
-            padding: 16px;
-            background: #ffffff;
-            border-radius: 2px;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            gap: 30px;
+        .result-box{
+            background:linear-gradient(135deg,#ec7120,#d66318);
+            color:#fff;
+            padding:35px;
+            border-radius:4px;
+            text-align:center;
+            margin-top:30px
         }
-        
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 400;
-            color: #1a1a1a;
-            font-size: 14px;
-            transition: color 0.2s;
-            user-select: none;
+        .result-box h3{
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:1.5px;
+            opacity:0.9;
+            margin-bottom:12px
         }
-        
-        .radio-group label:hover {
-            color: #ec7120;
+        .result-box .result-value{
+            font-size:52px;
+            font-weight:700;
+            letter-spacing:-1.5px
         }
-        
-        .radio-group input[type="radio"] {
-            margin-right: 8px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #ec7120;
+        .result-box .result-unit{
+            font-size:20px;
+            opacity:0.85;
+            margin-left:4px
         }
-        
-        /* Result Box */
-        .result-box {
-            background: linear-gradient(135deg, #ec7120 0%, #d66318 100%);
-            color: #ffffff;
-            padding: 35px 30px;
-            border-radius: 2px;
-            text-align: center;
-            margin-top: 35px;
-            box-shadow: 0 8px 24px rgba(236, 113, 32, 0.25);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .result-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .result-box h3 {
-            margin: 0 0 15px 0;
-            font-size: 12px;
-            font-weight: 600;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-        
-        .result-box .result-value {
-            font-size: 52px;
-            font-weight: 700;
-            letter-spacing: -1.5px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .result-box .result-unit {
-            font-size: 20px;
-            font-weight: 400;
-            opacity: 0.85;
-            margin-left: 4px;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 50px 20px 30px;
-            border-top: 1px solid #e8e8e8;
-            margin-top: 60px;
-        }
-        
-        .footer p {
-            color: #666666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .footer a {
-            color: #ec7120;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-            border-bottom: 1px solid transparent;
-        }
-        
-        .footer a:hover {
-            color: #d66318;
-            border-bottom-color: #d66318;
-        }
-        
-        .footer .brand {
-            font-size: 24px;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .calc-container {
-                gap: 40px;
-            }
-            
-            .calc-side {
-                padding: 30px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 40px 20px;
-            }
-            
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .header .subtitle {
-                font-size: 16px;
-            }
-            
-            .calc-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .calc-side {
-                padding: 25px;
-            }
-            
-            .calc-side h2 {
-                font-size: 20px;
-            }
-            
-            .result-box .result-value {
-                font-size: 42px;
-            }
-            
-            .radio-group {
-                flex-direction: column;
-                gap: 12px;
-            }
-        }
-        
-        /* Loading Animation */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        
-        .calculating {
-            animation: pulse 1s ease-in-out infinite;
-        }
-        
-        /* Smooth Transitions */
-        .result-value {
-            transition: all 0.3s ease;
+        @media(max-width:768px){
+            .container{padding:30px 15px}
+            .calc-side{padding:30px}
+            .result-box .result-value{font-size:44px}
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Spoke Length Calculator</h1>
-            <p class="subtitle">Professional Wheel Building Tool for Koova Hubs</p>
-            <div class="divider"></div>
-        </div>
-
-        <!-- Calculator Grid -->
         <div class="calc-container">
-            <!-- Left Side -->
+            <!-- Drive Side -->
+            <div class="calc-side">
+                <h2>Drive Side</h2>
+                <div class="radio-group">
+                    <label><input type="radio" name="spokeTypeR" value="jbend" checked onchange="onSpokeTypeChange('R')"> J-Bend</label>
+                    <label><input type="radio" name="spokeTypeR" value="straight" onchange="onSpokeTypeChange('R')"> Straight Pull</label>
+                </div>
+                <div class="form-group"><label>Hub Model</label>
+                    <select id="hubModelR" onchange="onHubModelChange('R')">
+                        <option value="custom</option>
+                        <option value="s10f">S10 Front</option>
+                        <option value="s10r">S10 Rear</option>
+                        <option value="s10bf">S10B Front</option>
+                        <option value="s10br">S10B Rear</option>
+                        <option value="s60f">S60 Front</option>
+                        <option value="s60r">S60 Rear</option>
+                        <option value="s60bf">S60B Front</option>
+                        <option value="s60br">S60B Rear</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>ERD (mm)</label><input type="number" id="erdR" step="0.1" value="622" oninput="calculate()"></div>
+                <div class="form-group"><label>Spoke Count</label><input type="number" id="spokeCountR" value="28" oninput="calculate()"></div>
+                <div class="form-group"><label>Cross Pattern</label><input type="number" id="crossR" value="3" oninput="calculate()"></div>
+                <div class="form-group"><label>Spoke Diameter (mm)</label><input type="number" id="spokeDimR" step="0.1" value="2.0" oninput="calculate()"></div>
+                <div class="form-group"><label>Flange PCD (mm)</label><input type="number" id="pcdR" step="0.1" value="56.2" oninput="calculate()"></div>
+                <div class="form-group"><label>Flange Offset (mm)</label><input type="number" id="offsetR" step="0.1" value="37" oninput="calculate()"></div>
+                <div class="form-group" id="centerOffsetRGroup" style="display:none"><label>Center Offset (mm)</label><input type="number" id="centerOffsetR" step="0.1" value="0" oninput="calculate()"></div>
+                <div class="result-box">
+                    <h3>Spoke Length</h3>
+                    <div class="result-value" id="resultR">--<span class="result-unit">mm</span></div>
+                </div>
+            </div>
+
+            <!-- Non-Drive Side -->
             <div class="calc-side">
                 <h2>Non-Drive Side</h2>
-                
                 <div class="radio-group">
-                    <label>
-                        <input type="radio" name="spokeTypeL" value="jbend" checked onchange="onSpokeTypeChange('L')">
-                        J-Bend
-                    </label>
-                    <label>
-                        <input type="radio" name="spokeTypeL" value="straight" onchange="onSpokeTypeChange('L')">
-                        Straight Pull
-                    </label>
+                    <label><input type="radio" name="spokeTypeL" value="jbend" checked onchange="onSpokeTypeChange('L')"> J-Bend</label>
+                    <label><input type="radio" name="spokeTypeL" value="straight" onchange="onSpokeTypeChange('L')"> Straight Pull</label>
                 </div>
-
-                <div class="form-group">
-                    <label>Hub Model</label>
+                <div class="form-group"><label>Hub Model</label>
                     <select id="hubModelL" onchange="onHubModelChange('L')">
                         <option value="custom">Custom / User Define</option>
                         <option value="s10f">S10 Front</option>
@@ -349,276 +159,123 @@
                         <option value="s60br">S60B Rear</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label>ERD (Effective Rim Diameter)</label>
-                    <input type="number" id="erdL" step="0.1" value="622" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Spoke Count</label>
-                    <input type="number" id="spokeCountL" value="28" oninput="calculate()">
-                </div>
-
-                <div class="form-group">
-                    <label>Cross Pattern</label>
-                    <input type="number" id="crossL" value="3" oninput="calculate()">
-                </div>
-
-                <div class="form-group">
-                    <label>Spoke Diameter</label>
-                    <input type="number" id="spokeDimL" step="0.1" value="2.0" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Flange PCD</label>
-                    <input type="number" id="pcdL" step="0.1" value="56.2" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Flange Offset</label>
-                    <input type="number" id="offsetL" step="0.1" value="22" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group" id="centerOffsetLGroup" style="display:none;">
-                    <label>Center Offset</label>
-                    <input type="number" id="centerOffsetL" step="0.1" value="0" oninput="calculate()" placeholder="mm">
-                </div>
-
+                <div class="form-group"><label>ERD (mm)</label><input type="number" id="erdL" step="0.1" value="622" oninput="calculate()"></div>
+                <div class="form-group"><label>Spoke Count</label><input type="number" id="spokeCountL" value="28" oninput="calculate()"></div>
+                <div class="form-group"><label>Cross Pattern</label><input type="number" id="crossL" value="3" oninput="calculate()"></div>
+                <div class="form-group"><label>Spoke Diameter (mm)</label><input type="number" id="spokeDimL" step="0.1" value="2.0" oninput="calculate()"></div>
+                <div class="form-group"><label>Flange PCD (mm)</label><input type="number" id="pcdL" step="0.1" value="56.2" oninput="calculate()"></div>
+                <div class="form-group"><label>Flange Offset (mm)</label><input type="number" id="offsetL" step="0.1" value="22" oninput="calculate()"></div>
+                <div class="form-group" id="centerOffsetLGroup" style="display:none"><label>Center Offset (mm)</label><input type="number" id="centerOffsetL" step="0.1" value="0" oninput="calculate()"></div>
                 <div class="result-box">
                     <h3>Spoke Length</h3>
                     <div class="result-value" id="resultL">--<span class="result-unit">mm</span></div>
                 </div>
             </div>
-
-            <!-- Right Side -->
-            <div class="calc-side">
-                <h2>Drive Side</h2>
-                
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="spokeTypeR" value="jbend" checked onchange="onSpokeTypeChange('R')">
-                        J-Bend
-                    </label>
-                    <label>
-                        <input type="radio" name="spokeTypeR" value="straight" onchange="onSpokeTypeChange('R')">
-                        Straight Pull
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label>Hub Model</label>
-                    <select id="hubModelR" onchange="onHubModelChange('R')">
-                        <option value="custom">Custom / User Define</option>
-                        <option value="s10f">S10 Front</option>
-                        <option value="s10r">S10 Rear</option>
-                        <option value="s10bf">S10B Front</option>
-                        <option value="s10br">S10B Rear</option>
-                        <option value="s60f">S60 Front</option>
-                        <option value="s60r">S60 Rear</option>
-                        <option value="s60bf">S60B Front</option>
-                        <option value="s60br">S60B Rear</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>ERD (Effective Rim Diameter)</label>
-                    <input type="number" id="erdR" step="0.1" value="622" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Spoke Count</label>
-                    <input type="number" id="spokeCountR" value="28" oninput="calculate()">
-                </div>
-
-                <div class="form-group">
-                    <label>Cross Pattern</label>
-                    <input type="number" id="crossR" value="3" oninput="calculate()">
-                </div>
-
-                <div class="form-group">
-                    <label>Spoke Diameter</label>
-                    <input type="number" id="spokeDimR" step="0.1" value="2.0" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Flange PCD</label>
-                    <input type="number" id="pcdR" step="0.1" value="56.2" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group">
-                    <label>Flange Offset</label>
-                    <input type="number" id="offsetR" step="0.1" value="37" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="form-group" id="centerOffsetRGroup" style="display:none;">
-                    <label>Center Offset</label>
-                    <input type="number" id="centerOffsetR" step="0.1" value="0" oninput="calculate()" placeholder="mm">
-                </div>
-
-                <div class="result-box">
-                    <h3>Spoke Length</h3>
-                    <div class="result-value" id="resultR">--<span class="result-unit">mm</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <div class="brand">KOOVA</div>
-            <p>Precision Engineering for Performance Cycling</p>
-            <p><a href="https://www.koovacomponents.com" target="_blank">www.koovacomponents.com</a></p>
         </div>
     </div>
 
     <script>
-        // Hub presets
-        var hubPresets = {
-            's10f':  { pcdL: 56.2, offsetL: 22,   offsetR: 37,   pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
-            's10r':  { pcdL: 56.2, offsetL: 35,   offsetR: 19.5, pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
-            's10bf': { pcdL: 56.2, offsetL: 26.5, offsetR: 42,   pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
-            's10br': { pcdL: 56.2, offsetL: 38,   offsetR: 22.5, pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
-            's60f':  { pcdL: 38.7, offsetL: 22.8, offsetR: 32.9, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
-            's60r':  { pcdL: 38.7, offsetL: 36.1, offsetR: 16.7, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
-            's60bf': { pcdL: 38.7, offsetL: 22.8, offsetR: 38,   pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' },
-            's60br': { pcdL: 38.7, offsetL: 39.1, offsetR: 21.9, pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' }
+        const hubPresets = {
+            's10f':  { pcdL:56.2, offsetL:22,   offsetR:37,   pcdR:56.2, centerL:0, centerR:0, type:'jbend' },
+            's10r':  { pcdL:56.2, offsetL:35,   offsetR:19.5, pcdR:56.2, centerL:0, centerR:0, type:'jbend' },
+            's10bf': { pcdL:56.2, offsetL:26.5, offsetR:42,   pcdR:56.2, centerL:0, centerR:0, type:'jbend' },
+            's10br': { pcdL:56.2, offsetL:38,   offsetR:22.5, pcdR:56.2, centerL:0, centerR:0, type:'jbend' },
+            's60f':  { pcdL:38.7, offsetL:22.8, offsetR:32.9, pcdR:56.2, centerL:1.5,centerR:1.5,type:'straight'},
+            's60r':  { pcdL:38.7, offsetL:36.1, offsetR:16.7, pcdR:56.2, centerL:1.5,centerR:1.5,type:'straight'},
+            's60bf': { pcdL:38.7, offsetL:22.8, offsetR:38,   pcdR:56.2, centerL:2,  centerR:2,  type:'straight'},
+            's60br': { pcdL:38.7, offsetL:39.1, offsetR:21.9, pcdR:56.2, centerL:2,  centerR:2,  type:'straight'}
         };
 
-        var debounceTimer = null;
+        let debounceTimer = null;
 
         function onHubModelChange(side) {
-            var select = document.getElementById('hubModel' + side);
-            var model = select.value;
-            
-            if (model === 'custom') {
-                enableUserInputMode(side);
-                return;
-            }
+            const model = document.getElementById('hubModel'+side).value;
+            if (model === 'custom') { enableUserInputMode(side); return; }
+            const p = hubPresets[model];
+            if (!p) return;
 
-            var preset = hubPresets[model];
-            if (!preset) return;
+            document.getElementById('pcd'+side).value   = side==='L' ? p.pcdL : p.pcdR;
+            document.getElementById('offset'+side).value = side==='L' ? p.offsetL : p.offsetR;
+            document.getElementById('centerOffset'+side).value = side==='L' ? p.centerL : p.centerR;
 
-            var isLeft = (side === 'L');
-            document.getElementById('pcd' + side).value = isLeft ? preset.pcdL : preset.pcdR;
-            document.getElementById('offset' + side).value = isLeft ? preset.offsetL : preset.offsetR;
-            document.getElementById('centerOffset' + side).value = isLeft ? preset.centerL : preset.centerR;
+            const isStraight = p.type === 'straight';
+            document.querySelectorAll(`input[name="spokeType${side}"]`)[isStraight?1:0].checked = true;
 
-            var isStraight = (preset.type === 'straight');
-            var radios = document.getElementsByName('spokeType' + side);
-            radios[0].checked = !isStraight;
-            radios[1].checked = isStraight;
-
-            document.getElementById('pcd' + side).disabled = true;
-            document.getElementById('offset' + side).disabled = true;
-            document.getElementById('centerOffset' + side).disabled = true;
+            document.getElementById('pcd'+side).disabled = true;
+            document.getElementById('offset'+side).disabled = true;
+            document.getElementById('centerOffset'+side).disabled = true;
 
             onSpokeTypeChange(side);
             calculate();
         }
 
         function enableUserInputMode(side) {
-            document.getElementById('pcd' + side).disabled = false;
-            document.getElementById('offset' + side).disabled = false;
-            document.getElementById('centerOffset' + side).disabled = false;
-            document.getElementById('cross' + side).disabled = false;
+            ['pcd','offset','centerOffset','cross'].forEach(f => {
+                document.getElementById(f+side).disabled = false;
+            });
         }
 
         function onSpokeTypeChange(side) {
-            var radios = document.getElementsByName('spokeType' + side);
-            var isStraight = radios[1].checked;
-
-            document.getElementById('centerOffset' + side + 'Group').style.display = isStraight ? 'block' : 'none';
-
-            var crossInput = document.getElementById('cross' + side);
+            const isStraight = document.querySelector(`input[name="spokeType${side}"]:checked`).value === 'straight';
+            document.getElementById('centerOffset'+side+'Group').style.display = isStraight ? 'block' : 'none';
+            const crossInput = document.getElementById('cross'+side);
             if (isStraight) {
-                var spokeCount = parseFloat(document.getElementById('spokeCount' + side).value) || 28;
-                crossInput.value = spokeCount < 27 ? 2 : 3;
+                const count = parseFloat(document.getElementById('spokeCount'+side).value) || 28;
+                crossInput.value = count < 27 ? 2 : 3;
                 crossInput.disabled = true;
-            } else {
-                crossInput.disabled = false;
-            }
-
+            } else crossInput.disabled = false;
             calculate();
         }
 
         function calculate() {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(function() {
-                calculateSpokeLengths();
-            }, 100);
+            debounceTimer = setTimeout(calculateSpokeLengths, 100);
         }
 
         function calculateSpokeLengths() {
-            var leftParams = readSideParameters('L');
-            var rightParams = readSideParameters('R');
-
-            var leftLength = calculateLength(leftParams);
-            var rightLength = calculateLength(rightParams);
-
-            var leftResult = document.getElementById('resultL');
-            var rightResult = document.getElementById('resultR');
-
-            if (isNaN(leftLength)) {
-                leftResult.innerHTML = '--<span class="result-unit">mm</span>';
-            } else {
-                leftResult.innerHTML = leftLength.toFixed(1) + '<span class="result-unit">mm</span>';
-            }
-
-            if (isNaN(rightLength)) {
-                rightResult.innerHTML = '--<span class="result-unit">mm</span>';
-            } else {
-                rightResult.innerHTML = rightLength.toFixed(1) + '<span class="result-unit">mm</span>';
-            }
+            const left  = readSide('L');
+            const right = readSide('R');
+            updateResult('L', calculateLength(left));
+            updateResult('R', calculateLength(right));
         }
 
-        function readSideParameters(side) {
-            var radios = document.getElementsByName('spokeType' + side);
-            var isStraight = radios[1].checked;
-
+        function readSide(side) {
+            const isStraight = document.querySelector(`input[name="spokeType${side}"]:checked`).value === 'straight';
             return {
                 isStraightPull: isStraight,
-                erd: parseFloat(document.getElementById('erd' + side).value) || 0,
-                spokes: parseFloat(document.getElementById('spokeCount' + side).value) || 0,
-                cross: parseFloat(document.getElementById('cross' + side).value) || 0,
-                holeDiameter: parseFloat(document.getElementById('spokeDim' + side).value) || 0,
-                pcd: parseFloat(document.getElementById('pcd' + side).value) || 0,
-                flangeOffset: parseFloat(document.getElementById('offset' + side).value) || 0,
-                centerOffset: parseFloat(document.getElementById('centerOffset' + side).value) || 0
+                erd:   parseFloat(document.getElementById('erd'+side).value) || 0,
+                spokes: parseFloat(document.getElementById('spokeCount'+side).value) || 0,
+                cross:  parseFloat(document.getElementById('cross'+side).value) || 0,
+                holeDiameter: parseFloat(document.getElementById('spokeDim'+side).value) || 0,
+                pcd:   parseFloat(document.getElementById('pcd'+side).value) || 0,
+                flangeOffset: parseFloat(document.getElementById('offset'+side).value) || 0,
+                centerOffset: parseFloat(document.getElementById('centerOffset'+side).value) || 0
             };
         }
 
+        function updateResult(side, len) {
+            const el = document.getElementById('result'+side);
+            el.innerHTML = isNaN(len) ? '--<span class="result-unit">mm</span>' : len.toFixed(1) + '<span class="result-unit">mm</span>';
+        }
+
         function calculateLength(p) {
-            if (p.erd <= 0 || p.pcd <= 0 || p.spokes <= 0) {
-                return NaN;
-            }
+            if (p.erd <= 0 || p.pcd <= 0 || p.spokes <= 0) return NaN;
 
             if (!p.isStraightPull) {
-                var angleDeg = 360.0 * p.cross * 2 / p.spokes;
-                var angleRad = angleDeg * Math.PI / 180;
-                var c = Math.sqrt(
-                    Math.pow(p.erd / 2, 2) + 
-                    Math.pow(p.pcd / 2, 2) - 
-                    2 * (p.erd / 2) * (p.pcd / 2) * Math.cos(angleRad)
-                );
-                var length = Math.sqrt(c * c + p.flangeOffset * p.flangeOffset) - p.holeDiameter / 2;
-                return Math.round(length * 10) / 10;
+                const angleRad = (360 * p.cross * 2 / p.spokes) * Math.PI / 180;
+                const c = Math.sqrt( Math.pow(p.erd/2,2) + Math.pow(p.pcd/2,2) - 2*(p.erd/2)*(p.pcd/2)*Math.cos(angleRad) );
+                return Math.round( (Math.sqrt(c*c + p.flangeOffset*p.flangeOffset) - p.holeDiameter/2) * 10 ) / 10;
             } else {
-                var effectiveCross = p.cross + 0.5;
-                var angle = 4 * Math.PI * effectiveCross / p.spokes;
-
-                var dx = p.erd / 2 * Math.cos(angle) - p.pcd / 2;
-                var dy = p.erd / 2 * Math.sin(angle);
-                var dz = p.flangeOffset;
-
-                var length = Math.sqrt(dx * dx + dy * dy + dz * dz) + p.centerOffset;
+                const effCross = p.cross + 0.5;
+                const angle = 4 * Math.PI * effCross / p.spokes;
+                const dx = p.erd/2 * Math.cos(angle) - p.pcd/2;
+                const dy = p.erd/2 * Math.sin(angle);
+                const length = Math.sqrt(dx*dx + dy*dy + p.flangeOffset*p.flangeOffset) + p.centerOffset;
                 return Math.round(length * 10) / 10;
             }
         }
 
-        window.onload = function() {
-            calculate();
-        };
+        window.onload = calculate;
     </script>
 </body>
 </html>
-
