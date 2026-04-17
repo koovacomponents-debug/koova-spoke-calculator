@@ -348,197 +348,152 @@
     </div>
 
     <script>
-        <!-- 只展示关键修改部分：HTML input + JS，CSS无需改 -->
+        // Hub presets
+        var hubPresets = {
+            's10f':  { pcdL: 56.2, offsetL: 22,   offsetR: 37,   pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
+            's10r':  { pcdL: 56.2, offsetL: 35,   offsetR: 19.5, pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
+            's10bf': { pcdL: 56.2, offsetL: 26.5, offsetR: 42,   pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
+            's10br': { pcdL: 56.2, offsetL: 38,   offsetR: 22.5, pcdR: 56.2, centerL: 0,   centerR: 0,   type: 'jbend' },
+            's60f':  { pcdL: 38.7, offsetL: 22.8, offsetR: 32.9, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
+            's60r':  { pcdL: 38.7, offsetL: 36.1, offsetR: 16.7, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
+            's60bf': { pcdL: 38.7, offsetL: 22.8, offsetR: 38,   pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' },
+            's60br': { pcdL: 38.7, offsetL: 39.1, offsetR: 21.9, pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' }
+        };
 
-<!-- Cross Pattern 输入（左右都改） -->
-<input type="number" id="crossL" value="3" oninput="markCrossEdited('L');calculate()">
-<input type="number" id="crossR" value="3" oninput="markCrossEdited('R');calculate()">
+        var debounceTimer = null;
 
-<script>
-var hubPresets = {
-    's10f':  { pcdL: 56.2, offsetL: 22,   offsetR: 37,   pcdR: 56.2, centerL: 0, centerR: 0, type: 'jbend' },
-    's10r':  { pcdL: 56.2, offsetL: 35,   offsetR: 19.5, pcdR: 56.2, centerL: 0, centerR: 0, type: 'jbend' },
-    's10bf': { pcdL: 56.2, offsetL: 26.5, offsetR: 42,   pcdR: 56.2, centerL: 0, centerR: 0, type: 'jbend' },
-    's10br': { pcdL: 56.2, offsetL: 38,   offsetR: 22.5, pcdR: 56.2, centerL: 0, centerR: 0, type: 'jbend' },
-    's60f':  { pcdL: 38.7, offsetL: 22.8, offsetR: 32.9, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
-    's60r':  { pcdL: 38.7, offsetL: 36.1, offsetR: 16.7, pcdR: 56.2, centerL: 1.5, centerR: 1.5, type: 'straight' },
-    's60bf': { pcdL: 38.7, offsetL: 22.8, offsetR: 38,   pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' },
-    's60br': { pcdL: 38.7, offsetL: 39.1, offsetR: 21.9, pcdR: 56.2, centerL: 2,   centerR: 2,   type: 'straight' }
-};
+        function onHubModelChange(side) {
+            var select = document.getElementById('hubModel' + side);
+            var model = select.value;
+            
+            if (model === 'custom') {
+                enableUserInputMode(side);
+                return;
+            }
 
-var debounceTimer = null;
+            var preset = hubPresets[model];
+            if (!preset) return;
 
-/* ========= 用户行为记录 ========= */
-function markCrossEdited(side) {
-    document.getElementById('cross' + side).dataset.userEdited = true;
-}
+            var isLeft = (side === 'L');
+            document.getElementById('pcd' + side).value = isLeft ? preset.pcdL : preset.pcdR;
+            document.getElementById('offset' + side).value = isLeft ? preset.offsetL : preset.offsetR;
+            document.getElementById('centerOffset' + side).value = isLeft ? preset.centerL : preset.centerR;
 
-/* ========= Hub 选择 ========= */
-function onHubModelChange(side) {
-    var model = document.getElementById('hubModel' + side).value;
+            var isStraight = (preset.type === 'straight');
+            var radios = document.getElementsByName('spokeType' + side);
+            radios[0].checked = !isStraight;
+            radios[1].checked = isStraight;
 
-    if (model === 'custom') {
-        enableUserInputMode(side);
-        return;
-    }
+            document.getElementById('pcd' + side).disabled = true;
+            document.getElementById('offset' + side).disabled = true;
+            document.getElementById('centerOffset' + side).disabled = true;
 
-    var preset = hubPresets[model];
-    if (!preset) return;
+            onSpokeTypeChange(side);
+            calculate();
+        }
 
-    var isLeft = (side === 'L');
+        function enableUserInputMode(side) {
+            document.getElementById('pcd' + side).disabled = false;
+            document.getElementById('offset' + side).disabled = false;
+            document.getElementById('centerOffset' + side).disabled = false;
+            document.getElementById('cross' + side).disabled = false;
+        }
 
-    document.getElementById('pcd' + side).value = isLeft ? preset.pcdL : preset.pcdR;
-    document.getElementById('offset' + side).value = isLeft ? preset.offsetL : preset.offsetR;
-    document.getElementById('centerOffset' + side).value = isLeft ? preset.centerL : preset.centerR;
+        function onSpokeTypeChange(side) {
+            var radios = document.getElementsByName('spokeType' + side);
+            var isStraight = radios[1].checked;
 
-    document.getElementById('pcd' + side).disabled = true;
-    document.getElementById('offset' + side).disabled = true;
-    document.getElementById('centerOffset' + side).disabled = true;
+            document.getElementById('centerOffset' + side + 'Group').style.display = isStraight ? 'block' : 'none';
 
-    var radios = document.getElementsByName('spokeType' + side);
-    var isStraight = preset.type === 'straight';
-    radios[0].checked = !isStraight;
-    radios[1].checked = isStraight;
+            var crossInput = document.getElementById('cross' + side);
+            if (isStraight) {
+                var spokeCount = parseFloat(document.getElementById('spokeCount' + side).value) || 28;
+                crossInput.value = spokeCount < 27 ? 2 : 3;
+                crossInput.disabled = true;
+            } else {
+                crossInput.disabled = false;
+            }
 
-    onSpokeTypeChange(side);
-}
+            calculate();
+        }
 
-/* ========= 自定义模式 ========= */
-function enableUserInputMode(side) {
-    document.getElementById('pcd' + side).disabled = false;
-    document.getElementById('offset' + side).disabled = false;
-    document.getElementById('centerOffset' + side).disabled = false;
-}
+        function calculate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                calculateSpokeLengths();
+            }, 100);
+        }
 
-/* ========= 交叉数推荐逻辑 ========= */
-function getRecommendedCross(spokes, isStraight) {
-    if (isStraight) {
-        if (spokes <= 24) return 1;
-        if (spokes <= 28) return 2;
-        return 2;
-    } else {
-        if (spokes <= 24) return 2;
-        return 3;
-    }
-}
+        function calculateSpokeLengths() {
+            var leftParams = readSideParameters('L');
+            var rightParams = readSideParameters('R');
 
-/* ========= Spoke 类型变化 ========= */
-function onSpokeTypeChange(side) {
-    var radios = document.getElementsByName('spokeType' + side);
-    var isStraight = radios[1].checked;
+            var leftLength = calculateLength(leftParams);
+            var rightLength = calculateLength(rightParams);
 
-    document.getElementById('centerOffset' + side + 'Group').style.display =
-        isStraight ? 'block' : 'none';
+            var leftResult = document.getElementById('resultL');
+            var rightResult = document.getElementById('resultR');
 
-    var crossInput = document.getElementById('cross' + side);
-    var spokes = parseFloat(document.getElementById('spokeCount' + side).value) || 28;
+            if (isNaN(leftLength)) {
+                leftResult.innerHTML = '--<span class="result-unit">mm</span>';
+            } else {
+                leftResult.innerHTML = leftLength.toFixed(1) + '<span class="result-unit">mm</span>';
+            }
 
-    if (!crossInput.dataset.userEdited) {
-        crossInput.value = getRecommendedCross(spokes, isStraight);
-    }
+            if (isNaN(rightLength)) {
+                rightResult.innerHTML = '--<span class="result-unit">mm</span>';
+            } else {
+                rightResult.innerHTML = rightLength.toFixed(1) + '<span class="result-unit">mm</span>';
+            }
+        }
 
-    crossInput.disabled = false;
+        function readSideParameters(side) {
+            var radios = document.getElementsByName('spokeType' + side);
+            var isStraight = radios[1].checked;
 
-    calculate();
-}
+            return {
+                isStraightPull: isStraight,
+                erd: parseFloat(document.getElementById('erd' + side).value) || 0,
+                spokes: parseFloat(document.getElementById('spokeCount' + side).value) || 0,
+                cross: parseFloat(document.getElementById('cross' + side).value) || 0,
+                holeDiameter: parseFloat(document.getElementById('spokeDim' + side).value) || 0,
+                pcd: parseFloat(document.getElementById('pcd' + side).value) || 0,
+                flangeOffset: parseFloat(document.getElementById('offset' + side).value) || 0,
+                centerOffset: parseFloat(document.getElementById('centerOffset' + side).value) || 0
+            };
+        }
 
-/* ========= 验证逻辑 ========= */
-function validateCross(p) {
-    if (p.cross < 0) return "Cross cannot be negative";
+        function calculateLength(p) {
+            if (p.erd <= 0 || p.pcd <= 0 || p.spokes <= 0) {
+                return NaN;
+            }
 
-    if (p.cross > p.spokes / 2) {
-        return "Cross too large";
-    }
+            if (!p.isStraightPull) {
+                var angleDeg = 360.0 * p.cross * 2 / p.spokes;
+                var angleRad = angleDeg * Math.PI / 180;
+                var c = Math.sqrt(
+                    Math.pow(p.erd / 2, 2) + 
+                    Math.pow(p.pcd / 2, 2) - 
+                    2 * (p.erd / 2) * (p.pcd / 2) * Math.cos(angleRad)
+                );
+                var length = Math.sqrt(c * c + p.flangeOffset * p.flangeOffset) - p.holeDiameter / 2;
+                return Math.round(length * 10) / 10;
+            } else {
+                var effectiveCross = p.cross + 0.5;
+                var angle = 4 * Math.PI * effectiveCross / p.spokes;
 
-    if (p.isStraightPull && p.cross > 3) {
-        return "Straight pull usually ≤2x";
-    }
+                var dx = p.erd / 2 * Math.cos(angle) - p.pcd / 2;
+                var dy = p.erd / 2 * Math.sin(angle);
+                var dz = p.flangeOffset;
 
-    return null;
-}
+                var length = Math.sqrt(dx * dx + dy * dy + dz * dz) + p.centerOffset;
+                return Math.round(length * 10) / 10;
+            }
+        }
 
-/* ========= 计算入口 ========= */
-function calculate() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(calculateSpokeLengths, 80);
-}
-
-/* ========= 主计算 ========= */
-function calculateSpokeLengths() {
-    var L = readSideParameters('L');
-    var R = readSideParameters('R');
-
-    var errL = validateCross(L);
-    var errR = validateCross(R);
-
-    var lenL = errL ? NaN : calculateLength(L);
-    var lenR = errR ? NaN : calculateLength(R);
-
-    renderResult('L', lenL, errL);
-    renderResult('R', lenR, errR);
-}
-
-/* ========= 渲染 ========= */
-function renderResult(side, length, error) {
-    var el = document.getElementById('result' + side);
-
-    if (error) {
-        el.innerHTML = '<span style="font-size:12px;">⚠ ' + error + '</span>';
-        return;
-    }
-
-    if (isNaN(length)) {
-        el.innerHTML = '--<span class="result-unit">mm</span>';
-        return;
-    }
-
-    el.innerHTML = length.toFixed(1) + '<span class="result-unit">mm</span>';
-}
-
-/* ========= 读取参数 ========= */
-function readSideParameters(side) {
-    var radios = document.getElementsByName('spokeType' + side);
-
-    return {
-        isStraightPull: radios[1].checked,
-        erd: +document.getElementById('erd' + side).value || 0,
-        spokes: +document.getElementById('spokeCount' + side).value || 0,
-        cross: +document.getElementById('cross' + side).value || 0,
-        holeDiameter: +document.getElementById('spokeDim' + side).value || 0,
-        pcd: +document.getElementById('pcd' + side).value || 0,
-        flangeOffset: +document.getElementById('offset' + side).value || 0,
-        centerOffset: +document.getElementById('centerOffset' + side).value || 0
-    };
-}
-
-/* ========= 核心计算 ========= */
-function calculateLength(p) {
-    if (p.erd <= 0 || p.pcd <= 0 || p.spokes <= 0) return NaN;
-
-    if (!p.isStraightPull) {
-        var angle = 2 * Math.PI * p.cross * 2 / p.spokes;
-        var c = Math.sqrt(
-            Math.pow(p.erd / 2, 2) +
-            Math.pow(p.pcd / 2, 2) -
-            2 * (p.erd / 2) * (p.pcd / 2) * Math.cos(angle)
-        );
-        return Math.sqrt(c * c + p.flangeOffset * p.flangeOffset) - p.holeDiameter / 2;
-    } else {
-        var effectiveCross = p.cross + 0.5;
-        var angle = 4 * Math.PI * effectiveCross / p.spokes;
-
-        var dx = p.erd / 2 * Math.cos(angle) - p.pcd / 2;
-        var dy = p.erd / 2 * Math.sin(angle);
-
-        return Math.sqrt(dx * dx + dy * dy + Math.pow(p.flangeOffset, 2)) + p.centerOffset;
-    }
-}
-
-window.onload = calculate;
-</script>
+        window.onload = function() {
+            calculate();
+        };
     </script>
 </body>
 </html>
-
-
-
